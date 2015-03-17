@@ -15,17 +15,17 @@ apt-get install -y build-essential libreadline-dev zlib1g-dev flex bison \
         libxml2-dev libxslt-dev libssl-dev wget
 
 echo "Downloading PostgreSQL and PostGIS sources at `date`"
-su postgres <<EOF
+su postgres <<'EOF'
 mkdir -p /home/postgres/src
 cd /home/postgres/src
-wget https://ftp.postgresql.org/pub/source/v9.4.1/postgresql-9.4.1.tar.bz2
-wget http://download.osgeo.org/postgis/source/postgis-2.1.5.tar.gz
-wget http://download.osgeo.org/geos/geos-3.4.2.tar.bz2
-wget http://download.osgeo.org/proj/proj-4.9.1.tar.gz
-wget http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz
-wget https://github.com/json-c/json-c/archive/json-c-0.11-20130402.tar.gz
-tar xjpf *.tar.bz2
-tar xzpf *.tar.gz
+wget -nv https://ftp.postgresql.org/pub/source/v9.4.1/postgresql-9.4.1.tar.bz2
+wget -nv http://download.osgeo.org/postgis/source/postgis-2.1.5.tar.gz
+wget -nv http://download.osgeo.org/geos/geos-3.4.2.tar.bz2
+wget -nv http://download.osgeo.org/proj/proj-4.9.1.tar.gz
+wget -nv http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz
+wget -nv https://github.com/json-c/json-c/archive/json-c-0.11-20130402.tar.gz
+for f in *.tar.bz2; do echo $f; tar -xjpf $f; done
+for f in *.tar.gz; do echo $f; tar -xzpf $f; done
 rm -f *.tar.bz2 *.tar.gz
 EOF
 
@@ -41,6 +41,7 @@ cd /home/postgres/src/postgresql-9.4.1
 make install-world
 
 # Update /etc/profile so that all login shells can find PostgreSQL.
+set +e
 grep -q "/usr/local/pgsql" /etc/profile
 if [ $? -ne 0 ]
 then
@@ -52,6 +53,7 @@ PATH=/usr/local/pgsql/bin:$PATH
 export PATH
 EOF02
 fi
+set -e
 
 # Since the current shell is not going to reread /etc/profile,
 # we need to set these environment variables here too before continuing.
