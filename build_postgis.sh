@@ -12,7 +12,7 @@ echo "Installing Postgres dependencies at `date`"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
 apt-get install -y build-essential libreadline-dev zlib1g-dev flex bison \
-        libxml2-dev libxslt-dev libssl-dev wget bunzip2
+        libxml2-dev libxslt-dev libssl-dev wget
 
 echo "Downloading PostgreSQL and PostGIS sources at `date`"
 su postgres <<EOF
