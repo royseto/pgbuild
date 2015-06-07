@@ -6,7 +6,7 @@
 set -ex
 
 groupadd -f postgres
-useradd -c postgres -d /home/postgres -g postgres -m -s /bin/bash postgres
+useradd -u 600 -c postgres -d /home/postgres -g postgres -m -s /bin/bash postgres
 
 echo "Installing Postgres dependencies at `date`"
 export DEBIAN_FRONTEND=noninteractive
