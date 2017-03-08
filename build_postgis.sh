@@ -24,6 +24,7 @@ wget -nv http://download.osgeo.org/geos/geos-3.4.2.tar.bz2
 wget -nv http://download.osgeo.org/proj/proj-4.9.1.tar.gz
 wget -nv http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz
 wget -nv https://github.com/json-c/json-c/archive/json-c-0.11-20130402.tar.gz
+wget -nv http://www.slony.info/downloads/2.2/source/slony1-2.2.5.tar.bz2
 for f in *.tar.bz2; do echo $f; tar -xjpf $f; done
 for f in *.tar.gz; do echo $f; tar -xzpf $f; done
 rm -f *.tar.bz2 *.tar.gz
@@ -124,6 +125,18 @@ EOF07
 
 echo "Installing PostGIS at `date`"
 cd $POSTGISDIR
+make install
+
+echo "Building Slony replication at `date`"
+SLONYDIR=/home/postgres/src/slony1-2.2.5
+su postgres <<EOF08
+cd $SLONYDIR
+./configure --with-pgconfigdir=/usr/local/pgsql/bin/pg_config
+make all
+EOF08
+
+echo "Installing Slony replication at `date`"
+cd $SLONYDIR
 make install
 
 echo "Running ldconfig at `date`"
