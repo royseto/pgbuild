@@ -140,12 +140,18 @@ cd $SLONYDIR
 make install
 
 echo "Building kmeans-postgresql at `date`"
-git clone --depth=1 --branch=master \
-    https://github.com/umitanuki/kmeans-postgresql.git \
-    /usr/local/pgsql/share/contrib/kmeans-postgresql
-rm -rf /usr/local/pgsql/share/contrib/kmeans-postgresql/.git
-cd /usr/local/pgsql/share/contrib/kmeans-postgresql
-ldconfig && LD_LIBRARY_PATH=/usr/local/pgsql/lib PATH=/usr/local/pgsql/bin:$PATH make
+ldconfig
+KMEANSDIR=/home/postgres/src/kmeans-postgresql
+su postgres <<EOF09
+git clone https://github.com/umitanuki/kmeans-postgresql.git $KMEANSDIR
+cd $KMEANSDIR
+LD_LIBRARY_PATH=/usr/local/pgsql/lib PATH=/usr/local/pgsql/bin:$PATH make
+EOF09
+
+echo "Installing kmeans-postgresql at `date`"
+cd $KMEANSDIR
+LD_LIBRARY_PATH=/usr/local/pgsql/lib PATH=/usr/local/pgsql/bin:$PATH \
+    make PG_CONFIG=/usr/local/pgsql/bin/pg_config install
 
 echo "Running ldconfig at `date`"
 ldconfig
