@@ -10,9 +10,9 @@ useradd -u 600 -c postgres -d /home/postgres -g postgres -m -s /bin/bash postgre
 
 echo "Installing Postgres dependencies at `date`"
 export DEBIAN_FRONTEND=noninteractive
-apt-get update -y
+apt-get update
 apt-get install -y build-essential libreadline-dev zlib1g-dev flex bison \
-        libxml2-dev libxslt-dev libssl-dev wget
+        libxml2-dev libxslt-dev libssl-dev wget git-core
 
 echo "Downloading PostgreSQL and PostGIS sources at `date`"
 su postgres <<'EOF'
@@ -138,6 +138,14 @@ EOF08
 echo "Installing Slony replication at `date`"
 cd $SLONYDIR
 make install
+
+echo "Building kmeans-postgresql at `date`"
+git clone --depth=1 --branch=master \
+    https://github.com/umitanuki/kmeans-postgresql.git \
+    /usr/local/pgsql/share/contrib/kmeans-postgresql
+rm -rf /usr/local/pgsql/share/contrib/kmeans-postgresql/.git
+cd /usr/local/pgsql/share/contrib/kmeans-postgresql
+ldconfig && LD_LIBRARY_PATH=/usr/local/pgsql/lib PATH=/usr/local/pgsql/bin:$PATH make
 
 echo "Running ldconfig at `date`"
 ldconfig
