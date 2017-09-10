@@ -18,13 +18,13 @@ echo "Downloading PostgreSQL and PostGIS sources at `date`"
 su postgres <<'EOF'
 mkdir -p /home/postgres/src
 cd /home/postgres/src
-wget -nv https://ftp.postgresql.org/pub/source/v9.4.1/postgresql-9.4.1.tar.bz2
-wget -nv http://download.osgeo.org/postgis/source/postgis-2.1.5.tar.gz
-wget -nv http://download.osgeo.org/geos/geos-3.4.2.tar.bz2
-wget -nv http://download.osgeo.org/proj/proj-4.9.1.tar.gz
-wget -nv http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz
-wget -nv https://github.com/json-c/json-c/archive/json-c-0.11-20130402.tar.gz
-wget -nv http://www.slony.info/downloads/2.2/source/slony1-2.2.5.tar.bz2
+wget -nv https://ftp.postgresql.org/pub/source/v9.6.5/postgresql-9.6.5.tar.bz2
+wget -nv http://download.osgeo.org/postgis/source/postgis-2.3.3.tar.gz
+wget -nv http://download.osgeo.org/geos/geos-3.6.2.tar.bz2
+wget -nv http://download.osgeo.org/proj/proj-4.9.3.tar.gz
+wget -nv http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz
+wget -nv https://github.com/json-c/json-c/archive/json-c-0.12.1-20160607.tar.gz
+wget -nv http://www.slony.info/downloads/2.2/source/slony1-2.2.6.tar.bz2
 for f in *.tar.bz2; do echo $f; tar -xjpf $f; done
 for f in *.tar.gz; do echo $f; tar -xzpf $f; done
 rm -f *.tar.bz2 *.tar.gz
@@ -32,13 +32,13 @@ EOF
 
 su postgres <<'EOF01'
 echo "Building postgres at `date`"
-cd /home/postgres/src/postgresql-9.4.1
+cd /home/postgres/src/postgresql-9.6.5
 ./configure
 make world
 EOF01
 
 echo "Installing postgres at `date`"
-cd /home/postgres/src/postgresql-9.4.1
+cd /home/postgres/src/postgresql-9.6.5
 make install-world
 
 # Update /etc/profile so that all login shells can find PostgreSQL.
@@ -67,7 +67,7 @@ echo "Running ldconfig at `date`"
 ldconfig
 
 echo "Building json-c at `date`"
-JSONCDIR=/home/postgres/src/json-c-json-c-0.11-20130402
+JSONCDIR=/home/postgres/src/json-c-json-c-0.12.1-20160607
 su postgres <<EOF03
 cd $JSONCDIR
 ./configure
@@ -79,7 +79,7 @@ cd $JSONCDIR
 make install
 
 echo "Building proj.4 at `date`"
-PROJ4DIR=/home/postgres/src/proj-4.9.1
+PROJ4DIR=/home/postgres/src/proj-4.9.3
 su postgres <<EOF04
 cd $PROJ4DIR
 ./configure
@@ -92,7 +92,7 @@ cd $PROJ4DIR
 make install
 
 echo "Building GEOS at `date`"
-GEOSDIR=/home/postgres/src/geos-3.4.2
+GEOSDIR=/home/postgres/src/geos-3.6.2
 su postgres <<EOF05
 cd $GEOSDIR
 ./configure
@@ -104,7 +104,7 @@ cd $GEOSDIR
 make install
 
 echo "Building GDAL at `date`"
-GDALDIR=/home/postgres/src/gdal-1.11.2
+GDALDIR=/home/postgres/src/gdal-2.2.1
 su postgres <<EOF06
 cd $GDALDIR
 ./configure
@@ -116,7 +116,7 @@ cd $GDALDIR
 make install
 
 echo "Building PostGIS at `date`"
-POSTGISDIR=/home/postgres/src/postgis-2.1.5
+POSTGISDIR=/home/postgres/src/postgis-2.3.3
 su postgres <<EOF07
 cd $POSTGISDIR
 ./configure --with-pgconfig=/usr/local/pgsql/bin/pg_config
@@ -128,7 +128,7 @@ cd $POSTGISDIR
 make install
 
 echo "Building Slony replication at `date`"
-SLONYDIR=/home/postgres/src/slony1-2.2.5
+SLONYDIR=/home/postgres/src/slony1-2.2.6
 su postgres <<EOF08
 cd $SLONYDIR
 ./configure --with-pgconfigdir=/usr/local/pgsql/bin/pg_config
