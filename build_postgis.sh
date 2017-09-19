@@ -12,7 +12,7 @@ echo "Installing Postgres dependencies at `date`"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y build-essential libreadline-dev zlib1g-dev flex bison \
-        libxml2-dev libxslt-dev libssl-dev wget git-core
+        libxml2-dev libxslt-dev libssl-dev wget git-core libsystemd-dev
 
 echo "Downloading PostgreSQL and PostGIS sources at `date`"
 su postgres <<'EOF'
@@ -33,7 +33,7 @@ EOF
 su postgres <<'EOF01'
 echo "Building postgres at `date`"
 cd /home/postgres/src/postgresql-9.6.5
-./configure
+./configure --with-systemd --with-pgport=6543 --with-opens
 make world
 EOF01
 
