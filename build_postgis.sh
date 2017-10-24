@@ -153,5 +153,20 @@ cd $KMEANSDIR
 LD_LIBRARY_PATH=/usr/local/pgsql/lib PATH=/usr/local/pgsql/bin:$PATH \
     make PG_CONFIG=/usr/local/pgsql/bin/pg_config install
 
+echo "Building postgresql-hll at `date`"
+ldconfig
+HLLDIR=/home/postgres/src/postgresql-hll
+su postgres <<EOF10
+git clone https://github.com/citusdata/postgresql-hll.git $HLLDIR
+cd $HLLDIR
+LD_LIBRARY_PATH=/usr/local/pgsql/lib PATH=/usr/local/pgsql/bin:$PATH \
+    make PG_CONFIG=/usr/local/pgsql/bin/pg_config install
+EOF10
+
+echo "Installing postgresql-hll at `date`"
+cd $HLLDIR
+LD_LIBRARY_PATH=/usr/local/pgsql/lib PATH=/usr/local/pgsql/bin:$PATH \
+    make PG_CONFIG=/usr/local/pgsql/bin/pg_config install
+
 echo "Running ldconfig at `date`"
 ldconfig
