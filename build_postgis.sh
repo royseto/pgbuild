@@ -5,8 +5,8 @@
 
 set -ex
 
-groupadd -f postgres
-useradd -u 600 -c postgres -d /home/postgres -g postgres -m -s /bin/bash postgres
+egrep -i "^postgres:" /etc/group || groupadd -f postgres
+egrep -i "^postgres:" /etc/passwd || useradd -u 600 -c postgres -d /home/postgres -g postgres -m -s /bin/bash postgres
 
 echo "Installing Postgres dependencies at `date`"
 export DEBIAN_FRONTEND=noninteractive
@@ -33,7 +33,7 @@ EOF
 su postgres <<'EOF01'
 echo "Building postgres at `date`"
 cd /home/postgres/src/postgresql-9.6.6
-./configure --with-systemd --with-pgport=6543 --with-opens
+./configure --with-systemd --with-pgport=6543 --with-openssl --with-ldap
 make world
 EOF01
 
