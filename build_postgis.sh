@@ -23,7 +23,7 @@ wget -nv http://download.osgeo.org/postgis/source/postgis-2.4.1.tar.gz
 wget -nv http://download.osgeo.org/geos/geos-3.6.2.tar.bz2
 wget -nv http://download.osgeo.org/proj/proj-4.9.3.tar.gz
 wget -nv http://download.osgeo.org/gdal/2.2.2/gdal-2.2.2.tar.gz
-wget -nv https://s3.amazonaws.com/json-c_releases/releases/json-c-0.12.1.tar.gz
+wget -nv https://github.com/json-c/json-c/archive/json-c-0.12.1-20160607.tar.gz
 wget -nv http://www.slony.info/downloads/2.2/source/slony1-2.2.6.tar.bz2
 for f in *.tar.bz2; do echo $f; tar -xjpf $f; done
 for f in *.tar.gz; do echo $f; tar -xzpf $f; done
@@ -67,7 +67,7 @@ echo "Running ldconfig at `date`"
 ldconfig
 
 echo "Building json-c at `date`"
-JSONCDIR=/home/postgres/src/json-c-0.12.1
+JSONCDIR=/home/postgres/src/json-c-json-c-0.12.1-20160607
 su postgres <<EOF03
 cd $JSONCDIR
 ./configure
