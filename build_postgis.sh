@@ -18,12 +18,12 @@ echo "Downloading PostgreSQL and PostGIS sources at `date`"
 su postgres <<'EOF'
 mkdir -p /home/postgres/src
 cd /home/postgres/src
-wget -nv https://ftp.postgresql.org/pub/source/v9.6.5/postgresql-9.6.5.tar.bz2
-wget -nv http://download.osgeo.org/postgis/source/postgis-2.3.3.tar.gz
+wget -nv https://ftp.postgresql.org/pub/source/v9.6.6/postgresql-9.6.6.tar.bz2
+wget -nv http://download.osgeo.org/postgis/source/postgis-2.4.1.tar.gz
 wget -nv http://download.osgeo.org/geos/geos-3.6.2.tar.bz2
 wget -nv http://download.osgeo.org/proj/proj-4.9.3.tar.gz
-wget -nv http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz
-wget -nv https://github.com/json-c/json-c/archive/json-c-0.12.1-20160607.tar.gz
+wget -nv http://download.osgeo.org/gdal/2.2.2/gdal-2.2.2.tar.gz
+wget -nv https://s3.amazonaws.com/json-c_releases/releases/json-c-0.12.1.tar.gz
 wget -nv http://www.slony.info/downloads/2.2/source/slony1-2.2.6.tar.bz2
 for f in *.tar.bz2; do echo $f; tar -xjpf $f; done
 for f in *.tar.gz; do echo $f; tar -xzpf $f; done
@@ -32,13 +32,13 @@ EOF
 
 su postgres <<'EOF01'
 echo "Building postgres at `date`"
-cd /home/postgres/src/postgresql-9.6.5
+cd /home/postgres/src/postgresql-9.6.6
 ./configure --with-systemd --with-pgport=6543 --with-opens
 make world
 EOF01
 
 echo "Installing postgres at `date`"
-cd /home/postgres/src/postgresql-9.6.5
+cd /home/postgres/src/postgresql-9.6.6
 make install-world
 
 # Update /etc/profile so that all login shells can find PostgreSQL.
@@ -67,7 +67,7 @@ echo "Running ldconfig at `date`"
 ldconfig
 
 echo "Building json-c at `date`"
-JSONCDIR=/home/postgres/src/json-c-json-c-0.12.1-20160607
+JSONCDIR=/home/postgres/src/json-c-0.12.1
 su postgres <<EOF03
 cd $JSONCDIR
 ./configure
@@ -104,7 +104,7 @@ cd $GEOSDIR
 make install
 
 echo "Building GDAL at `date`"
-GDALDIR=/home/postgres/src/gdal-2.2.1
+GDALDIR=/home/postgres/src/gdal-2.2.2
 su postgres <<EOF06
 cd $GDALDIR
 ./configure
@@ -116,7 +116,7 @@ cd $GDALDIR
 make install
 
 echo "Building PostGIS at `date`"
-POSTGISDIR=/home/postgres/src/postgis-2.3.3
+POSTGISDIR=/home/postgres/src/postgis-2.4.1
 su postgres <<EOF07
 cd $POSTGISDIR
 ./configure --with-pgconfig=/usr/local/pgsql/bin/pg_config
